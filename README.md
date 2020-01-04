@@ -7,4 +7,4 @@ Collaboration between:
 
 School of Engineering - University of Minho
 
-Best solution found - 16191.12
+Best solution found - 16191.12 (Euclidean Distance)
