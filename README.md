@@ -7,4 +7,4 @@ Collaboration between:
 
 School of Engineering - University of Minho
 
-Best solution found - 9092.266
+Best solution found - 16191.12
