@@ -382,7 +382,7 @@ def natural_selection(pop_size=1000, generations=1000, test='Tournament', allTim
                 print("\t\tstarting fitness params", round(np.mean(fitns), 2), "+/-", round(np.std(fitns), 2))
                 print("\t\tcurr best Solution:    ", round(pop.fitness[0], 2))
                 if notImprovingCounter > 0:
-                    print("\t\t\t no improvent for:", notImprovingCounter)
+                    print("\t\t\t no improvement for:", notImprovingCounter)
 
             newPop = []
 
