@@ -352,8 +352,8 @@ def natural_selection(pop_size=1000, generations=1000, test='Tournament', allTim
         # Initializing population
         pop = Population()
         if len(recordFiles) == 0:
-            pop.greedy_initial(int(pop_size / 2), map=qatarmap)
-            # pop.scramble_initial(int(pop_size/4), map=qatarmap)
+            pop.greedy_initial(int(pop_size / 4), map=qatarmap)
+            pop.scramble_initial(int(pop_size/4), map=qatarmap)
             pop.random_initial(int(pop_size / 2), map=qatarmap)
         else:
             pop.currentBest_initial(int(pop_size * 0.75), recordFiles)
@@ -394,12 +394,12 @@ def natural_selection(pop_size=1000, generations=1000, test='Tournament', allTim
             else:
                 notImprovingCounter = 0
 
-                # Check if new record, if true save it
+            # Check if new record, if true save it
             if currBest < allTimeBest:
                 print("\nSaving new record")
                 allTimeBest = currBest
 
-                fileName = "record_at_" + str(int(round(pop.fitness[0]))) + ".pkl"
+                fileName = "record_" + str(int(round(pop.fitness[0]))) + ".pkl"
                 with open(fileName, 'wb') as f:
                     pickle.dump(pop.population[0], f, -1)
                 newRecords.append(fileName)
@@ -558,47 +558,6 @@ if __name__ == '__main__' and False:
     print("############################")
 
     qatarmap = Map("qa194.tsp")
-
-    rec_1 = [182, 194, 190, 189, 192, 191, 188, 193, 185, 170, 162, 155, 135, 121, 108, 92, 81, 70, 60, 69, 24, 26, 14,
-             13, 16, 36, 62, 71,
-             78, 88, 95, 97, 105, 112, 120, 133, 143, 160, 166, 171, 180, 178, 181, 177, 184, 175, 174, 173, 157, 141,
-             122, 103, 93, 83, 79,
-             77, 68, 67, 58, 31, 12, 10, 5, 3, 2, 1, 6, 23, 76, 87, 102, 113, 126, 140, 149, 163, 169, 179, 183, 187,
-             186, 172, 164, 138, 119,
-             91, 72, 25, 11, 7, 17, 21, 33, 57, 64, 45, 37, 51, 43, 48, 53, 52, 46, 44, 35, 32, 42, 49, 50, 55, 54, 41,
-             38, 34, 27, 22, 18, 28,
-             29, 39, 40, 47, 61, 66, 84, 110, 123, 124, 128, 115, 107, 106, 118, 136, 151, 159, 165, 168, 167, 158, 148,
-             129, 116, 96, 74, 75,
-             80, 82, 89, 94, 104, 127, 132, 130, 111, 98, 86, 85, 65, 20, 63, 90, 101, 109, 114, 134, 137, 125, 99, 59,
-             8, 4, 9, 15, 19, 30, 56,
-             73, 100, 117, 131, 147, 152, 153, 154, 150, 144, 139, 146, 142, 145, 156, 161, 176]
-
-    rec_1_Path = Path([qatarmap.cities[x - 1] for x in rec_1])
-
-    rec_2 = [61, 58, 53, 54, 55, 50, 49, 35, 12, 10, 15, 19, 30, 46, 56, 48, 52, 41, 44, 42, 32, 38, 43, 47, 40, 34, 27,
-             28, 57, 81, 78, 80,
-             89, 99, 94, 104, 127, 132, 134, 145, 156, 163, 174, 177, 170, 166, 135, 121, 117, 107, 97, 88, 70, 45, 39,
-             37, 29, 33, 60, 69,
-             74, 72, 26, 17, 14, 11, 8, 4, 2, 1, 6, 16, 25, 75, 93, 122, 141, 153, 157, 154, 169, 176, 161, 149, 140,
-             130, 98, 86, 90, 82,
-             76, 87, 102, 109, 114, 119, 144, 150, 139, 138, 137, 142, 146, 164, 172, 179, 173, 165, 159, 152, 131, 136,
-             129, 133, 143, 160,
-             171, 185, 193, 181, 178, 180, 167, 162, 155, 148, 151, 158, 168, 184, 188, 189, 191, 192, 190, 194, 182,
-             186, 187, 183, 175,
-             147, 118, 106, 92, 84, 66, 31, 9, 5, 3, 7, 13, 62, 101, 111, 125, 126, 113, 103, 91, 71, 36, 20, 65, 85,
-             63, 59, 23, 24, 21,
-             18, 22, 51, 73, 100, 110, 112, 116, 120, 123, 124, 128, 115, 108, 105, 96, 95, 83, 79, 77, 64, 68, 67]
-
-    rec_2_Path = Path([qatarmap.cities[x - 1] for x in rec_2])
-
-    print("\n", "rec_1_Path")
-    print("\nvalue", rec_1_Path.calculate_fitness(sqrt=False))
-    print("\nvalue", rec_1_Path.calculate_fitness(sqrt=True))
-
-    print("\n", "rec_2_Path")
-    print("\nvalue", rec_2_Path.calculate_fitness(sqrt=False))
-    print("\nvalue", rec_2_Path.calculate_fitness(sqrt=True))
-    exit()
     # qatarmap.plot_map()
 
     print("\n")
@@ -649,47 +608,62 @@ if __name__ == '__main__' and False:
     pop[2].mutate_greedy_scramble()
     print("Change in fitness:", round((fitness - pop[2].calculate_fitness()) / fitness * 100, 2), "%")
 
-    print(
-        "\nPerform a crossover between Path at index 2 and Path at index 1, replacing the Path at index 0 and at index 10 with the offspring")
+    print("\nPerform a crossover between Path at index 2 and Path at index 1, replacing the Path at index 0 and at index 10 with the offspring")
     fitness = pop[2].calculate_fitness()
     pop[0], pop[10] = pop[2].crossover(pop[1])
-    print("Change in fitness in relation to Path 2:", round((fitness - pop[0].calculate_fitness()) / fitness * 100, 2),
-          "%")
-    print("Change in fitness in relation to Path 2:", round((fitness - pop[10].calculate_fitness()) / fitness * 100, 2),
-          "%\n")
+    print("Change in fitness in relation to Path 2:", round((fitness - pop[0].calculate_fitness()) / fitness * 100, 2), "%")
+    print("Change in fitness in relation to Path 2:", round((fitness - pop[10].calculate_fitness()) / fitness * 100, 2), "%\n")
 
 if __name__ == '__main__':
     # print('Roulette')
     # Roulette = natural_selection(1000, 5000, 'Roulette')
 
+
+
     # We first run in start-up mode, that is no previous records are supplied and the population is initialized part
     # randomly and part greedly. After some sucessfull runs, the best scores are used to initialize a new population
-    # enabling better results. The scores are saved on a best only with a initial threshold of 2.8 M In the actual
+    # enabling better results. The scores are saved on a best only with a initial threshold of 2.25 M In the actual
     # run, this process was repeated twice, first using solutions ~16k and then with solutions ~10k. Tourment proved
     # superior to roulette wheel (the two last lines were written a posteriori)
 
     """ ATTENTION: THIS WILL CREATE MULTIPLE INTERMEDIATE FILES """
 
     print('Tournament')
-
-    recordFiles = natural_selection(100, 5000, 'Tournament', allTimeBest=2800000)
-
-    recor = loadObj(recordFiles[-1])
-    bestLast = recor.calculate_fitness(sqrt=False)
+    
+    # First run, from scratch
+    recordFiles = natural_selection(100, 5000, 'Tournament', allTimeBest = 2250000)
+    
+    bestLast = loadObj(recordFiles[-1]).calculate_fitness(sqrt=False)
     print("\nbestLast", bestLast, "\n")
-    toUse = -20 if len(recordFiles) >= 20 else len(recordFiles) * -1
-    recordFiles = natural_selection(100, 100, 'Tournament', allTimeBest=bestLast, recordFiles=recordFiles[toUse:])
-
-    recor = loadObj(recordFiles[-1])
-    bestLast = recor.calculate_fitness(sqrt=False)
+    toUse = -10 if len(recordFiles) >= 10 else len(recordFiles)*-1
+    
+    
+    # Second run, from scratch
+    recordFiles_2 = natural_selection(100, 5000, 'Tournament', allTimeBest = 2250000)
+    
+    bestLast_2 = loadObj(recordFiles_2[-1]).calculate_fitness(sqrt=False)
     print("\nbestLast", bestLast, "\n")
-    toUse = -20 if len(recordFiles) >= 20 else len(recordFiles) * -1
-    recordFiles = natural_selection(200, 100, 'Tournament', allTimeBest=bestLast, recordFiles=recordFiles[toUse:])
-
-    recor = loadObj(recordFiles[-1])
-    bestLast = recor.calculate_fitness(sqrt=False)
+    toUse_2 = -10 if len(recordFiles_2) >= 10 else len(recordFiles_2)*-1
+    
+    bestLast = bestLast if bestLast < bestLast_2 else bestLast_2
+    
+    
+    # Third run, using records from previous two
+    recordFiles = natural_selection(100, 5000, 'Tournament', allTimeBest =  bestLast, recordFiles=recordFiles[toUse:] + recordFiles_2[toUse_2:])
+    
+    bestLast = loadObj(recordFiles[-1]).calculate_fitness(sqrt=False)
+    print("\nbestLast", bestLast, "\n")
+    toUse = -20 if len(recordFiles) >= 20 else len(recordFiles)*-1
+    
+    
+    # Last run, using records from previous run
+    recordFiles = natural_selection(100, 5000, 'Tournament', allTimeBest =  bestLast, recordFiles=recordFiles[toUse:])
+    
+    print("\nbestLast", loadObj(recordFiles[-1]).calculate_fitness(sqrt=False), "\n")
+    
+    
     """                                                                                       
-    recor = loadObj("record_at_758729.0.pkl")
+    recor = loadObj("record_at_747528.0.pkl")
     print(recor)
     print("len", len(recor))
     print(recor.calculate_fitness(sqrt=False))
