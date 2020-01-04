@@ -1,1 +1,1 @@
-# Qatar-TSP-Evolutionary-Algorithm
+# Qatar Traveling Salesman Problem with an Evolutionary Algorithm
