@@ -616,12 +616,3 @@ if __name__ == '__main__':
     recordFiles = natural_selection(100, 5000, 'Tournament', allTimeBest = 27000000)
 
     print("\nbestLast", loadObj(recordFiles[-1]).calculate_fitness(sqrt=False), "\n")
-    
-    
-    """                                                                                       
-    recor = loadObj("record_at_747528.0.pkl")
-    print(recor)
-    print("len", len(recor))
-    print(recor.calculate_fitness(sqrt=False))
-    print(recor.calculate_fitness(sqrt=True))
-    """
