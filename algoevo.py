@@ -316,19 +316,6 @@ class Population:
             assert len(path) == n_cities  # Check if all cities were placed
             self.population.append(Path(path))
 
-    def currentBest_initial(self, size: int, recordFiles):
-        print("Initializing with known records from previous runs", size)
-
-        records = [loadObj(fileName) for fileName in recordFiles]
-
-        while len(self.population) < int(size / 2):
-            parent_1, parent_2 = [records[i] for i in np.random.choice(len(records), 2, replace=False)]
-            self.population.extend(parent_1.crossover(parent_2))
-
-        while len(self.population) < size:
-            i = np.random.choice(len(records), 1)[0]
-            self.population.append(records[i].mutate_swap(rate=0.05, inPlace=False))
-
     # Make population subscriptable
     def __getitem__(self, x):
         return self.population[x]
@@ -341,7 +328,7 @@ class Population:
         return iter(self.population)
 
 
-def natural_selection(pop_size=1000, generations=1000, test='Tournament', allTimeBest=0, recordFiles=[]):
+def natural_selection(pop_size=1000, generations=1000, test='Tournament', allTimeBest=0):
     try:
         qatarmap = Map("qa194.tsp")
         counter = 0  # generation counter
@@ -351,13 +338,10 @@ def natural_selection(pop_size=1000, generations=1000, test='Tournament', allTim
 
         # Initializing population
         pop = Population()
-        if len(recordFiles) == 0:
-            pop.greedy_initial(int(pop_size / 4), map=qatarmap)
-            pop.scramble_initial(int(pop_size/4), map=qatarmap)
-            pop.random_initial(int(pop_size / 2), map=qatarmap)
-        else:
-            pop.currentBest_initial(int(pop_size * 0.75), recordFiles)
-            pop.random_initial(int(pop_size / 4), map=qatarmap)
+
+        pop.greedy_initial(int(pop_size / 4), map=qatarmap)
+        pop.scramble_initial(int(pop_size/4), map=qatarmap)
+        pop.random_initial(int(pop_size / 2), map=qatarmap)
 
         pop.calculate_fitness(sqrt=False)
         currBest = pop.fitness[0]
@@ -620,45 +604,17 @@ if __name__ == '__main__':
 
 
 
-    # We first run in start-up mode, that is no previous records are supplied and the population is initialized part
-    # randomly and part greedly. After some sucessfull runs, the best scores are used to initialize a new population
-    # enabling better results. The scores are saved on a best only with a initial threshold of 2.7 M In the actual
-    # run, this process was repeated twice, first using solutions ~16k and then with solutions ~10k. Tourment proved
-    # superior to roulette wheel (the two last lines were written a posteriori)
-
+    # We initialized the population in part randomly and part greedly.
+    # If it gets stuck injects randomness
+    # The scores are saved on a best only with a initial threshold of 2.7 M 
+    
     """ ATTENTION: THIS WILL CREATE MULTIPLE INTERMEDIATE FILES """
 
     print('Tournament')
     
-    # First run, from scratch
-    recordFiles = natural_selection(100, 5000, 'Tournament', allTimeBest = 2700000)
-    
-    bestLast = loadObj(recordFiles[-1]).calculate_fitness(sqrt=False)
-    print("\nbestLast", bestLast, "\n")
-    toUse = -10 if len(recordFiles) >= 10 else len(recordFiles)*-1
-    
-    
-    # Second run, from scratch
-    recordFiles_2 = natural_selection(100, 5000, 'Tournament', allTimeBest = 2700000)
-    
-    bestLast_2 = loadObj(recordFiles_2[-1]).calculate_fitness(sqrt=False)
-    print("\nbestLast", bestLast, "\n")
-    toUse_2 = -10 if len(recordFiles_2) >= 10 else len(recordFiles_2)*-1
-    
-    bestLast = bestLast if bestLast < bestLast_2 else bestLast_2
-    
-    
-    # Third run, using records from previous two
-    recordFiles = natural_selection(100, 5000, 'Tournament', allTimeBest =  bestLast, recordFiles=recordFiles[toUse:] + recordFiles_2[toUse_2:])
-    
-    bestLast = loadObj(recordFiles[-1]).calculate_fitness(sqrt=False)
-    print("\nbestLast", bestLast, "\n")
-    toUse = -20 if len(recordFiles) >= 20 else len(recordFiles)*-1
-    
-    
-    # Last run, using records from previous run
-    recordFiles = natural_selection(100, 5000, 'Tournament', allTimeBest =  bestLast, recordFiles=recordFiles[toUse:])
-    
+
+    recordFiles = natural_selection(100, 100, 'Tournament', allTimeBest = 27000000)
+
     print("\nbestLast", loadObj(recordFiles[-1]).calculate_fitness(sqrt=False), "\n")
     
     
