@@ -399,7 +399,7 @@ def natural_selection(pop_size=1000, generations=1000, test='Tournament', allTim
                 print("\nSaving new record")
                 allTimeBest = currBest
 
-                fileName = "record_" + str(int(round(pop.fitness[0]))) + ".pkl"
+                fileName = "record_at_" + str(round(pop.fitness[0])) + ".pkl"
                 with open(fileName, 'wb') as f:
                     pickle.dump(pop.population[0], f, -1)
                 newRecords.append(fileName)
@@ -622,7 +622,7 @@ if __name__ == '__main__':
 
     # We first run in start-up mode, that is no previous records are supplied and the population is initialized part
     # randomly and part greedly. After some sucessfull runs, the best scores are used to initialize a new population
-    # enabling better results. The scores are saved on a best only with a initial threshold of 2.25 M In the actual
+    # enabling better results. The scores are saved on a best only with a initial threshold of 2.7 M In the actual
     # run, this process was repeated twice, first using solutions ~16k and then with solutions ~10k. Tourment proved
     # superior to roulette wheel (the two last lines were written a posteriori)
 
@@ -631,7 +631,7 @@ if __name__ == '__main__':
     print('Tournament')
     
     # First run, from scratch
-    recordFiles = natural_selection(100, 5000, 'Tournament', allTimeBest = 2250000)
+    recordFiles = natural_selection(100, 5000, 'Tournament', allTimeBest = 2700000)
     
     bestLast = loadObj(recordFiles[-1]).calculate_fitness(sqrt=False)
     print("\nbestLast", bestLast, "\n")
@@ -639,7 +639,7 @@ if __name__ == '__main__':
     
     
     # Second run, from scratch
-    recordFiles_2 = natural_selection(100, 5000, 'Tournament', allTimeBest = 2250000)
+    recordFiles_2 = natural_selection(100, 5000, 'Tournament', allTimeBest = 2700000)
     
     bestLast_2 = loadObj(recordFiles_2[-1]).calculate_fitness(sqrt=False)
     print("\nbestLast", bestLast, "\n")

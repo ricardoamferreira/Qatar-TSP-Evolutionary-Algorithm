@@ -6,3 +6,5 @@ Collaboration between:
 - [Tiago Sousa](https://github.com/tiago8)
 
 School of Engineering - University of Minho
+
+Best solution found - 9092.266
