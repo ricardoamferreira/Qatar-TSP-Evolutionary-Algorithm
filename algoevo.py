@@ -613,7 +613,7 @@ if __name__ == '__main__':
     print('Tournament')
     
 
-    recordFiles = natural_selection(100, 100, 'Tournament', allTimeBest = 27000000)
+    recordFiles = natural_selection(100, 5000, 'Tournament', allTimeBest = 27000000)
 
     print("\nbestLast", loadObj(recordFiles[-1]).calculate_fitness(sqrt=False), "\n")
     
